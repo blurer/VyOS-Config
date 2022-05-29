@@ -27,6 +27,7 @@ set interfaces ethernet eth0 description 'LAN'
 ### ssh
 ```
 set service ssh port '22'
+set system name-server 1.1.1.1
 ```
 ### dhcp
 ```
