@@ -50,3 +50,48 @@ set nat source rule 200 outbound-interface 'eth2'
 set nat source rule 200 source address '10.2.1.0/24'
 set nat source rule 200 translation address masquerade
 ```
+
+# Firewall Rules
+## Base rules
+```
+set firewall name OUTSIDE-IN default-action 'drop'
+set firewall name OUTSIDE-IN rule 10 action 'accept'
+set firewall name OUTSIDE-IN rule 10 state established 'enable'
+set firewall name OUTSIDE-IN rule 10 state related 'enable'
+set firewall name OUTSIDE-LOCAL default-action 'drop'
+set firewall name OUTSIDE-LOCAL rule 10 action 'accept'
+set firewall name OUTSIDE-LOCAL rule 10 state established 'enable'
+set firewall name OUTSIDE-LOCAL rule 10 state related 'enable'
+set firewall name OUTSIDE-LOCAL rule 20 action 'accept'
+set firewall name OUTSIDE-LOCAL rule 20 icmp type-name 'echo-request'
+set firewall name OUTSIDE-LOCAL rule 20 protocol 'icmp'
+set firewall name OUTSIDE-LOCAL rule 20 state new 'enable'
+```
+## Apply to Interfaces
+```
+set interfaces ethernet eth0 firewall in name 'OUTSIDE-IN'
+set interfaces ethernet eth0 firewall local name 'OUTSIDE-LOCAL'
+set interfaces ethernet eth2 firewall in name 'OUTSIDE-IN'
+set interfaces ethernet eth2 firewall local name 'OUTSIDE-LOCAL'
+```
+## User Config
+```
+set system login user {user} authentication plaintext-password {password}
+```
+## Load Balance
+```
+set load-balancing wan interface-health eth0 failure-count 5
+set load-balancing wan interface-health eth0 nexthop 192.168.128.1
+set load-balancing wan interface-health eth0 test 10 type ping
+set load-balancing wan interface-health eth0 test 10 target 192.168.128.1
+set load-balancing wan interface-health eth1 failure-count 4
+set load-balancing wan interface-health eth1 nexthop 192.168.150.1
+set load-balancing wan interface-health eth1 test 10 type ping
+set load-balancing wan interface-health eth1 test 10 target 192.168.150.1
+set load-balancing wan interface-health eth1 test 20 type ping
+set load-balancing wan interface-health eth1 test 20 target 66.77.88.99
+set load-balancing wan rule 10 failover
+set load-balancing wan rule 10 inbound-interface eth1
+set load-balancing wan rule 10 interface eth2 weight 10
+set load-balancing wan rule 10 interface eth0 weight 1
+```
