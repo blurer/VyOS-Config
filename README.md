@@ -6,15 +6,17 @@ Setup and backup of my VyOS configs
 
 # Interfaces
 ## eth0 -> WAN1
+```
 set interfaces ethernet eth0 address dhcp
 set interfaces ethernet eth0 address dhcpv6
 set interfaces ethernet eth0 description 'NTT DoCoMo'
-
+```
 ## eth2 -> WAN2
+```
 set interfaces ethernet eth2 address dhcp
 set interfaces ethernet eth2 address dhcpv6
 set interfaces ethernet eth0 description 'Fiber'
-
+```
 ## eth1 -> LAN
 set interfaces ethernet eth1 address 10.2.1.1/24
 set interfaces ethernet eth0 description 'LAN'
