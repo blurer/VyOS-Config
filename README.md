@@ -1,6 +1,19 @@
 # VyOS-Config
 Setup and backup of my VyOS configs
 
+Below is base system configuration with the following:
+- Interface configuration
+- Firewall rules
+- Dual WAN (failover)
+- System config (user, dns)
+- DHCP pool (10.2.1.0/24)
+
+Interfaces:
+- ETH0: WAN1 (DHCP v4/v6)
+- ETH1: LAN (10.2.1.1)
+- ETH2: WAN2 (DHCP v4/v6)
+- ETH3: Unused
+
 # Base Config
 
 
