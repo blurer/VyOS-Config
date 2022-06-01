@@ -1,0 +1,78 @@
+set firewall name OUTSIDE-IN default-action 'drop'
+set firewall name OUTSIDE-IN rule 10 action 'accept'
+set firewall name OUTSIDE-IN rule 10 state established 'enable'
+set firewall name OUTSIDE-IN rule 10 state related 'enable'
+set firewall name OUTSIDE-LOCAL default-action 'drop'
+set firewall name OUTSIDE-LOCAL rule 10 action 'accept'
+set firewall name OUTSIDE-LOCAL rule 10 state established 'enable'
+set firewall name OUTSIDE-LOCAL rule 10 state related 'enable'
+set firewall name OUTSIDE-LOCAL rule 20 action 'accept'
+set firewall name OUTSIDE-LOCAL rule 20 icmp type-name 'echo-request'
+set firewall name OUTSIDE-LOCAL rule 20 protocol 'icmp'
+set firewall name OUTSIDE-LOCAL rule 20 state new 'enable'
+set interfaces ethernet eth0 address 'dhcp'
+set interfaces ethernet eth0 address 'dhcpv6'
+set interfaces ethernet eth0 description 'NTT DoCoMo'
+set interfaces ethernet eth0 firewall in name 'OUTSIDE-IN'
+set interfaces ethernet eth0 firewall local name 'OUTSIDE-LOCAL'
+set interfaces ethernet eth0 hw-id '00:e0:67:21:7b:30'
+set interfaces ethernet eth1 address '10.2.1.1/24'
+set interfaces ethernet eth1 description 'LAN'
+set interfaces ethernet eth1 hw-id '00:e0:67:21:7b:31'
+set interfaces ethernet eth2 address 'dhcp'
+set interfaces ethernet eth2 address 'dhcpv6'
+set interfaces ethernet eth2 description 'Fiber'
+set interfaces ethernet eth2 firewall in name 'OUTSIDE-IN'
+set interfaces ethernet eth2 firewall local name 'OUTSIDE-LOCAL'
+set interfaces ethernet eth2 hw-id '00:e0:67:21:7b:32'
+set interfaces ethernet eth3 address '10.2.2.1/24'
+set interfaces ethernet eth3 description 'pi8g'
+set interfaces ethernet eth3 hw-id '00:e0:67:21:7b:33'
+set interfaces loopback lo
+set load-balancing wan flush-connections
+set load-balancing wan interface-health eth0 failure-count '5'
+set load-balancing wan interface-health eth0 nexthop '192.168.128.1'
+set load-balancing wan interface-health eth0 test 10 target '8.8.8.8'
+set load-balancing wan interface-health eth0 test 10 type 'ping'
+set load-balancing wan interface-health eth2 failure-count '4'
+set load-balancing wan interface-health eth2 nexthop '192.168.150.1'
+set load-balancing wan interface-health eth2 test 10 target '1.1.1.1'
+set load-balancing wan interface-health eth2 test 10 type 'ping'
+set load-balancing wan rule 10 failover
+set load-balancing wan rule 10 inbound-interface 'eth1'
+set load-balancing wan rule 10 interface eth0 weight '1'
+set load-balancing wan rule 10 interface eth2 weight '10'
+set nat source rule 100 outbound-interface 'eth0'
+set nat source rule 100 source address '10.2.1.0/24'
+set nat source rule 100 translation address 'masquerade'
+set nat source rule 101 outbound-interface 'eth2'
+set nat source rule 101 source address '10.2.1.0/24'
+set nat source rule 101 translation address 'masquerade'
+set service dhcp-server shared-network-name LAN subnet 10.2.1.0/24 default-router '10.2.1.1'
+set service dhcp-server shared-network-name LAN subnet 10.2.1.0/24 domain-name 'lurer.lan'
+set service dhcp-server shared-network-name LAN subnet 10.2.1.0/24 lease '600'
+set service dhcp-server shared-network-name LAN subnet 10.2.1.0/24 name-server '54.249.76.131'
+set service dhcp-server shared-network-name LAN subnet 10.2.1.0/24 range 0 start '10.2.1.100'
+set service dhcp-server shared-network-name LAN subnet 10.2.1.0/24 range 0 stop '10.2.1.200'
+set service dns
+set service ssh port '22'
+set system config-management commit-revisions '100'
+set system conntrack modules ftp
+set system conntrack modules h323
+set system conntrack modules nfs
+set system conntrack modules pptp
+set system conntrack modules sip
+set system conntrack modules sqlnet
+set system conntrack modules tftp
+set system console device ttyS0 speed '115200'
+set system host-name 'vyos'
+set system login user bl authentication encrypted-password '$6$MtOSKJjxYPz9.9Eo$4wHB46U2orp/GMEFVzq87YZqNZ8qIAmGrNphQeO6bjt/rw5.J0zpo.RKi.lly5ycgfhnEE.G3vX13TmjPhaI0.'
+set system login user vyos authentication encrypted-password '$6$ed3MdfkJ23kb/Btj$dzJi/drcywoyPDv0EcGAVklsIBgGYTMkr2R/RuviCVEExIHeAop7pg9tej607lJXLTpHCyP16rH0OCKKrdvZe.'
+set system login user vyos authentication plaintext-password ''
+set system name-server '54.249.76.131'
+set system ntp server time1.vyos.net
+set system ntp server time2.vyos.net
+set system ntp server time3.vyos.net
+set system syslog global facility all level 'info'
+set system syslog global facility protocols level 'debug'
+set system time-zone 'Asia/Tokyo'
